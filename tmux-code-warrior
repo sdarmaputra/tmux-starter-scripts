@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Basic layout for coding purpose
+# It has one main pane suitable for running text editor (i.e. vim) 
+# and several bottom panes suitable for running test suites or terminal commands
+
+maxPaneHeight=40
+defaultBottomPaneCount=2
+bottomPaneCount=$defaultBottomPaneCount
+workingDir=$PWD
+
+function createTmux {
+
+	tmux new-session -d -s "$1" -c $3
+	tmux select-window -t :0
+	tmux split-window -c $3
+	
+	#preparing bottom pane
+	if [ $2 -gt 1 ]; then
+		for i in `seq 1 $[ $2 - 1 ]`;
+		do
+			tmux split-window -h -t :.$i -c $3
+		done
+
+	fi
+
+	tmux select-layout -t :0 main-horizontal		
+	tmux select-pane -t :.0
+	tmux resize-pane -t :.1 -y $[ maxPaneHeight / 4 ]
+	tmux attach-session -t $1 -c $3
+}
+
+# Arguments:
+# ------------
+# $1 for session name
+# $2 for amount of bottom pane's child
+# $3 for working directory
+
+if [ $# -eq 0 ]
+	then
+		echo 'session name required!'
+	else
+		if ! [ -z $2 ]; then
+				bottomPaneCount=$2
+		fi
+		if ! [ -z $3 ]; then
+				workingDir=$3
+		fi
+		createTmux $1 $bottomPaneCount $workingDir
+fi 
