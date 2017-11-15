@@ -2,6 +2,8 @@
 
 My personal tmux starter script to bootstrap a working environment based on my daily habit.
 
+![tcw-sample](./sample/tcw.gif)
+
 ## Usage
 1. Run the script inside terminal.
 2. Wait for tmux to be launched based on the configurations.
