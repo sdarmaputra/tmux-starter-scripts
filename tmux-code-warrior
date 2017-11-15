@@ -10,7 +10,6 @@ bottomPaneCount=$defaultBottomPaneCount
 workingDir=$PWD
 
 function createTmux {
-
 	tmux new-session -d -s "$1" -c $3
 	tmux select-window -t :0
 	tmux split-window -c $3
